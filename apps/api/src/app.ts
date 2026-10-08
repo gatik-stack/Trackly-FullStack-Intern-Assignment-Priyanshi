@@ -8,6 +8,8 @@ import {
   notFoundHandler,
 } from "./middlewares/errorHandler.js";
 import authRoutes from "./routes/authRoutes.js";
+import projectRoutes from "./routes/projectRoutes.js";
+
 const app = express();
 
 app.use(helmet());
@@ -29,6 +31,7 @@ app.get("/api/health", (_req, res) => {
   });
 });
 app.use("/api/auth", authRoutes);
+app.use("/api/projects", projectRoutes);
 // 404 handler must come after all routes
 app.use(notFoundHandler);
 
