@@ -37,4 +37,5 @@ router.get(
   requireAuth,
   me,
 );
+
 export default router;
