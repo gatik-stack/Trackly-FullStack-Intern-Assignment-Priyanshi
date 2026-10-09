@@ -18,32 +18,32 @@ import {
   projectSchema,
 } from "@trackly/shared";
 
+import {
+  add as addMember,
+  remove as removeMember,
+} from "../controllers/memberController.js";
 const router = Router();
 
 router.use(requireAuth);
 
-// GET /api/projects
 router.get(
   "/",
   validate({ query: projectListQuerySchema }),
   list,
 );
 
-// POST /api/projects
 router.post(
   "/",
   validate({ body: projectSchema }),
   create,
 );
 
-// GET /api/projects/:id
 router.get(
   "/:id",
   requireProjectMember,
   get,
 );
 
-// PATCH /api/projects/:id
 router.patch(
   "/:id",
   requireProjectMember,
@@ -52,11 +52,23 @@ router.patch(
   update,
 );
 
-// DELETE /api/projects/:id
 router.delete(
   "/:id",
   requireProjectOwnerOrAdmin,
   remove,
 );
 
+router.post(
+  "/:id/members",
+  requireProjectMember,
+  requireProjectOwner,
+  addMember,
+);
+
+router.delete(
+  "/:id/members/:userId",
+  requireProjectMember,
+  requireProjectOwner,
+  removeMember,
+);
 export default router;
