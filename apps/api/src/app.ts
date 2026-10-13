@@ -9,7 +9,8 @@ import {
 } from "./middlewares/errorHandler.js";
 import authRoutes from "./routes/authRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
-
+import taskRoutes from "./routes/taskRoutes.js";
+import commentRoutes from "./routes/commentRoutes.js";
 const app = express();
 
 app.use(helmet());
@@ -30,12 +31,12 @@ app.get("/api/health", (_req, res) => {
     status: "ok",
   });
 });
+
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
-// 404 handler must come after all routes
+app.use("/api/tasks", taskRoutes);
+app.use("/api", commentRoutes);
 app.use(notFoundHandler);
-
-// Central error handler must be the last middleware
 app.use(errorHandler);
 
 export default app;

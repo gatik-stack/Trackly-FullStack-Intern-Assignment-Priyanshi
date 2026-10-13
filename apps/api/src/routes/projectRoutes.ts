@@ -16,6 +16,8 @@ import { validate } from "../middlewares/validate.js";
 import {
   projectListQuerySchema,
   projectSchema,
+  createTaskSchema,
+  taskListQuerySchema,
 } from "@trackly/shared";
 
 import {
@@ -23,6 +25,12 @@ import {
   remove as removeMember,
 } from "../controllers/memberController.js";
 const router = Router();
+
+import {
+  listProjectTasks,
+  createTask,
+} from "../controllers/taskController.js";
+
 
 router.use(requireAuth);
 
@@ -38,6 +46,19 @@ router.post(
   create,
 );
 
+router.get(
+  "/:id/tasks",
+  requireProjectMember,
+  validate({ query: taskListQuerySchema }),
+  listProjectTasks,
+);
+
+router.post(
+  "/:id/tasks",
+  requireProjectMember,
+  validate({ body: createTaskSchema }),
+  createTask,
+);
 router.get(
   "/:id",
   requireProjectMember,
