@@ -1,6 +1,7 @@
 import { prisma } from "../utils/prisma.js";
 import { AppError } from "../utils/AppError.js";
 import type { ProjectInput } from "@trackly/shared";
+import { logActivity } from "./activityService.js";
 
 export async function listProjects(
   userId: string,
@@ -94,6 +95,15 @@ export async function createProject(
   return prisma.$transaction(async (tx) => {
     const project = await tx.project.create({
       data: projectData,
+    });
+
+    await logActivity(tx, {
+      action: "PROJECT_CREATED",
+      projectId: project.id,
+      userId,
+      meta: {
+        name: project.name,
+      },
     });
 
     await tx.projectMember.create({

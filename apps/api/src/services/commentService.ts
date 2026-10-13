@@ -54,7 +54,7 @@ export async function createComment(
     });
 
     await logActivity(tx, {
-      action: "COMMENT_CREATED",
+      action: "COMMENT_ADDED",
       projectId: task.projectId,
       taskId,
       userId: authorId,

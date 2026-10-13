@@ -1,8 +1,17 @@
-
 import type { Prisma } from "../../generated/prisma/client.js";
 
+export type ActivityAction =
+  | "PROJECT_CREATED"
+  | "TASK_CREATED"
+  | "TASK_UPDATED"
+  | "TASK_STATUS_CHANGED"
+  | "COMMENT_ADDED"
+  | "MEMBER_ADDED"
+  | "MEMBER_REMOVED"
+  | "TASK_DELETED";
+
 type LogActivityInput = {
-  action: string;
+  action: ActivityAction;
   projectId: string;
   userId: string;
   taskId?: string;
@@ -19,7 +28,7 @@ export async function logActivity(
       projectId: input.projectId,
       userId: input.userId,
       ...(input.taskId ? { taskId: input.taskId } : {}),
-      ...(input.meta ? { meta: input.meta } : {}),
+      ...(input.meta !== undefined ? { meta: input.meta } : {}),
     },
   });
 }
