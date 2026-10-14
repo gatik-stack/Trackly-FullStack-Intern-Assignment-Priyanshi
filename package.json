@@ -9,5 +9,8 @@
     "db:migrate": "pnpm --filter api exec prisma migrate dev",
     "db:seed": "pnpm --filter api exec prisma db seed"
   },
-  "packageManager": "pnpm@11.25.0"
+  "packageManager": "pnpm@11.25.0",
+  "devDependencies": {
+    "prettier": "^3.9.10"
+  }
 }

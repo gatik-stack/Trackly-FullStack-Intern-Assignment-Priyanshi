@@ -12,13 +12,14 @@ const app = express();
 
 app.use(helmet());
 
+const webOrigin = process.env.WEB_ORIGIN ?? "http://localhost:3000";
+
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: webOrigin,
     credentials: true,
   }),
 );
-
 app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
 app.use(morgan("dev"));

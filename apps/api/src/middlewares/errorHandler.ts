@@ -20,6 +20,7 @@ export function errorHandler(
       error: {
         code: error.code,
         message: error.message,
+        details: {},
       },
     });
     return;
@@ -31,6 +32,7 @@ export function errorHandler(
     error: {
       code: "INTERNAL_SERVER_ERROR",
       message: "Internal server error",
+      details: {},
     },
   });
 }

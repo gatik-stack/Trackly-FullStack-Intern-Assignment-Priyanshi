@@ -9,3 +9,4 @@ dist/
 coverage/
 
 *.log
+apps/api/src/generated/
