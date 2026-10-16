@@ -1,8 +1,11 @@
+
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
+import { registerSchema } from "@trackly/shared/schemas/auth";
+import { validate } from "./middlewares/validate.js";
 import {
   errorHandler,
   notFoundHandler,
@@ -24,10 +27,16 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 
 app.get("/api/health", (_req, res) => {
-  res.json({
-    status: "ok",
-  });
+  res.json({ status: "ok" });
 });
+
+app.post(
+  "/api/auth/register",
+  validate({ body: registerSchema }),
+  (_req, res) => {
+    res.status(200).json({ message: "Validation passed" });
+  },
+);
 
 // 404 handler must come after all routes
 app.use(notFoundHandler);
