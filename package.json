@@ -1,0 +1,13 @@
+{
+  "name": "trackly",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --parallel --filter './apps/*' dev",
+    "build": "pnpm --recursive build",
+    "lint": "pnpm --recursive lint",
+    "db:migrate": "pnpm --filter api exec prisma migrate dev",
+    "db:seed": "pnpm --filter api exec prisma db seed"
+  },
+  "packageManager": "pnpm@11.25.0"
+}
