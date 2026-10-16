@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import { prisma } from "../utils/prisma.js";
 import { AppError } from "../utils/AppError.js";
+import { Prisma } from "../../generated/prisma/client.js";
 
 const publicUserSelect = {
   id: true,
@@ -29,17 +30,32 @@ export async function registerUser(
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const user = await prisma.user.create({
-    data: {
-      name,
-      email,
-      password: hashedPassword,
-      role: "MEMBER",
-    },
-    select: publicUserSelect,
-  });
+  try {
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        role: "MEMBER",
+      },
+      select: publicUserSelect,
+    });
 
-  return user;
+    return user;
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      throw new AppError(
+        "Email is already registered",
+        409,
+        "EMAIL_ALREADY_EXISTS",
+      );
+    }
+
+    throw error;
+  }
 }
 
 export async function loginUser(email: string, password: string) {
@@ -66,12 +82,12 @@ export async function loginUser(email: string, password: string) {
   }
 
   return {
-  id: user.id,
-  name: user.name,
-  email: user.email,
-  role: user.role,
-  createdAt: user.createdAt,
-};
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    createdAt: user.createdAt,
+  };
 }
 
 export async function getUserById(id: string) {
